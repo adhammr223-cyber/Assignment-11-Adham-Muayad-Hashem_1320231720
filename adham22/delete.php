@@ -42,7 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+// Reuse the session token so opening another form does not invalidate this one.
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 $csrf = $_SESSION['csrf_token'];
 ?>
 <!DOCTYPE html>
