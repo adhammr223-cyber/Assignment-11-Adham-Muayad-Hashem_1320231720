@@ -36,7 +36,8 @@ function getDB(): PDO
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
             http_response_code(500);
-            die(renderFatalError('Database connection failed: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')));
+            error_log($e->getMessage());
+            die(renderFatalError('Database connection failed. Check your local database settings.'));
         }
     }
 
@@ -119,6 +120,14 @@ function validateStudentInput(array $post): array
     }
     if ($data['enroll_date'] === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['enroll_date'])) {
         $errors[] = 'Enrollment date is required (YYYY-MM-DD).';
+    }
+
+    // A date can match YYYY-MM-DD but still be impossible, such as February 30.
+    if (preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', $data['enroll_date'])) {
+        $parts = explode('-', $data['enroll_date']);
+        if (!checkdate((int)$parts[1], (int)$parts[2], (int)$parts[0])) {
+            $errors[] = 'Enrollment date must be a real calendar date.';
+        }
     }
 
     return ['data' => $data, 'errors' => $errors];
