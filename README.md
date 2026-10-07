@@ -9,6 +9,14 @@ A PHP and MySQL project for managing student records. I used PDO for database ac
 - Validate names, email, phone, major, GPA and enrollment date format.
 - Store records in MySQL with a unique email field.
 
+## What I practiced
+
+CRUD workflows, PDO database access, form validation and relational constraints.
+
+## Preview
+
+This project requires PHP and MySQL. Run it locally using the setup below.
+
 ## Technologies
 
 PHP, MySQL, HTML and CSS.
